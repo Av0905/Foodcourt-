@@ -5,7 +5,7 @@ const menuItems = [
         name: "Classic Cheeseburger",
         category: "burger",
         price: 149,
-        image: "assets/burger.png",
+        image: "./assets/burger.png",
         desc: "Juicy veg patty with cheese, lettuce, and signature sauce."
     },
     {
@@ -13,7 +13,7 @@ const menuItems = [
         name: "Pepperoni Passion",
         category: "pizza",
         price: 349,
-        image: "assets/pizza.png",
+        image: "./assets/pizza.png",
         desc: "Hand-tossed crust with loaded pepperoni and mozzarella."
     },
     {
@@ -21,7 +21,7 @@ const menuItems = [
         name: "Dragon Sushi Roll",
         category: "sushi",
         price: 399,
-        image: "assets/dragon sushi roll.png",
+        image: "./assets/dragon-sushi-roll.png",
         desc: "Fresh salmon and tuna nigiri with signature dragon rolls."
     },
     // Chinese
@@ -30,7 +30,7 @@ const menuItems = [
         name: "Veg Manchurian Dry",
         category: "chinese",
         price: 160,
-        image: "assets/veg manchurian dry.png",
+        image: "./assets/veg-manchurian-dry.png",
         desc: "Deep-fried veg balls tossed in spicy soy-garlic sauce."
     },
     {
@@ -38,7 +38,7 @@ const menuItems = [
         name: "Hakka Noodles",
         category: "chinese",
         price: 140,
-        image: "assets/hakka noodles.png",
+        image: "./assets/hakka-noodles.png",
         desc: "Classic stir-fried noodles with fresh garden vegetables."
     },
     // Kathiyawadi
@@ -47,7 +47,7 @@ const menuItems = [
         name: "Kathiyawadi Thali",
         category: "kathiyawadi",
         price: 220,
-        image: "assets/kathiyawadi thalii.png",
+        image: "./assets/kathiyawadi-thali.png",
         desc: "Authentic thali with Bajra Rotla, Baingan Bharta, and more."
     },
     {
@@ -55,7 +55,7 @@ const menuItems = [
         name: "Vagharelo Rotlo",
         category: "kathiyawadi",
         price: 130,
-        image: "assets/vagharelo rolto.png",
+        image: "./assets/vagharelo-rotlo.png",
         desc: "Traditional spiced buttermilk soaked millet bread."
     },
     // South Indian
@@ -64,7 +64,7 @@ const menuItems = [
         name: "Masala Dosa",
         category: "southindian",
         price: 120,
-        image: "assets/masala_dosa.png",
+        image: "./assets/masala-dosa.png",
         desc: "Crispy rice crepe filled with spiced potato masala."
     },
     {
@@ -72,10 +72,11 @@ const menuItems = [
         name: "Idli Sambar (2 Pcs)",
         category: "southindian",
         price: 80,
-        image: "assets/idli_sambar.png",
+        image: "./assets/idli-sambar.png",
         desc: "Soft steamed rice cakes served with hot sambar and chutney."
     }
 ];
+
 
 let cart = [];
 
@@ -116,7 +117,7 @@ categoryBtns.forEach(btn => {
         categoryBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const category = btn.dataset.category;
-        
+
         if (category === 'all') {
             displayMenuItems(menuItems);
         } else {
@@ -136,7 +137,7 @@ function addToCart(id) {
     } else {
         cart.push({ ...item, quantity: 1 });
     }
-    
+
     updateCart();
     openCartSidebar();
 }
@@ -192,7 +193,7 @@ function closeModal() {
     paymentModal.classList.remove('active');
 }
 
-window.startPayment = function(method) {
+window.startPayment = function (method) {
     const initial = document.getElementById('initialPaymentState');
     const processing = document.getElementById('processingState');
     const success = document.getElementById('successState');
