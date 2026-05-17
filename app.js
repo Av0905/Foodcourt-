@@ -166,8 +166,8 @@ const closeMobileMenu = document.getElementById('closeMobileMenu');
 
 // Initialize Menu
 function displayMenuItems(items) {
-    menuGrid.innerHTML = items.map(item => `
-        <div class="menu-card" data-category="${item.category}">
+    menuGrid.innerHTML = items.map((item, idx) => `
+        <div class="menu-card" data-category="${item.category}" data-aos="fade-up" data-aos-delay="${(idx % 3) * 100}">
             <img src="${item.image}" alt="${item.name}" class="menu-img">
             <div class="menu-content">
                 <h3>${item.name}</h3>
@@ -183,6 +183,32 @@ function displayMenuItems(items) {
     `).join('');
 }
 
+function renderSkeletons() {
+    menuGrid.innerHTML = `
+        <div class="skeleton-card">
+            <div class="skeleton-image"></div>
+            <div class="skeleton-text title"></div>
+            <div class="skeleton-text desc"></div>
+            <div class="skeleton-text price"></div>
+            <div class="skeleton-text btn"></div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-image"></div>
+            <div class="skeleton-text title"></div>
+            <div class="skeleton-text desc"></div>
+            <div class="skeleton-text price"></div>
+            <div class="skeleton-text btn"></div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-image"></div>
+            <div class="skeleton-text title"></div>
+            <div class="skeleton-text desc"></div>
+            <div class="skeleton-text price"></div>
+            <div class="skeleton-text btn"></div>
+        </div>
+    `;
+}
+
 // Category Filtering
 categoryBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -190,12 +216,17 @@ categoryBtns.forEach(btn => {
         btn.classList.add('active');
         const category = btn.dataset.category;
 
-        if (category === 'all') {
-            displayMenuItems(menuItems);
-        } else {
-            const filtered = menuItems.filter(item => item.category === category);
-            displayMenuItems(filtered);
-        }
+        renderSkeletons();
+
+        setTimeout(() => {
+            if (category === 'all') {
+                displayMenuItems(menuItems);
+            } else {
+                const filtered = menuItems.filter(item => item.category === category);
+                displayMenuItems(filtered);
+            }
+            AOS.refresh();
+        }, 500);
     });
 });
 
@@ -531,4 +562,45 @@ if (closeMobileMenu) {
 
 window.closeMobileMenuFunc = function() {
     mobileSidebar.classList.remove('active');
+}
+
+// Initialize AOS Scroll Library
+AOS.init({
+    duration: 800,
+    once: true,
+    offset: 100
+});
+
+// Testimonials Carousel Slider Logic
+const testimonialsSlider = document.getElementById('testimonialsSlider');
+const sliderDotsContainer = document.getElementById('sliderDots');
+const testimonialCards = document.querySelectorAll('.testimonial-card');
+
+if (testimonialsSlider && testimonialCards.length > 0) {
+    let activeSlideIndex = 0;
+    
+    // Generate dots
+    testimonialCards.forEach((_, idx) => {
+        const dot = document.createElement('div');
+        dot.className = `dot ${idx === 0 ? 'active' : ''}`;
+        dot.addEventListener('click', () => goToSlide(idx));
+        sliderDotsContainer.appendChild(dot);
+    });
+    
+    const dots = document.querySelectorAll('.dot');
+    
+    function goToSlide(index) {
+        activeSlideIndex = index;
+        testimonialsSlider.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === index);
+        });
+    }
+    
+    // Auto slide every 5 seconds
+    setInterval(() => {
+        let nextIndex = activeSlideIndex + 1;
+        if (nextIndex >= testimonialCards.length) nextIndex = 0;
+        goToSlide(nextIndex);
+    }, 5000);
 }

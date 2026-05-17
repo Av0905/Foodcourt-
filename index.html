@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
@@ -46,16 +47,16 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <h1 class="animate">Premium Flavors<br><span>Delivered Fast.</span></h1>
-        <p class="animate">Explore a world of culinary excellence at Gourmet Hub. From artisan pizzas to fresh sushi, we bring the best food court experience to your fingertips.</p>
-        <div class="animate">
+        <h1 data-aos="fade-down" data-aos-duration="1000">Premium Flavors<br><span>Delivered Fast.</span></h1>
+        <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">Explore a world of culinary excellence at Gourmet Hub. From artisan pizzas to fresh sushi, we bring the best food court experience to your fingertips.</p>
+        <div data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="400">
             <a href="#menu" class="btn btn-primary">Order Now</a>
         </div>
     </section>
 
     <!-- Menu Section -->
     <section class="section" id="menu">
-        <div class="section-title">
+        <div class="section-title" data-aos="fade-up">
             <p>Our Specialities</p>
             <h2>Explore Our Menu</h2>
         </div>
@@ -82,10 +83,10 @@
 
     <!-- About Section -->
     <section class="section" id="about" style="background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 4rem; padding: 4rem 10%; flex-wrap: wrap;">
-        <div style="flex: 1; min-width: 300px;">
+        <div style="flex: 1; min-width: 300px;" data-aos="fade-right">
             <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Restaurant Interior" style="width: 100%; border-radius: 20px; border: 1px solid var(--glass-border);">
         </div>
-        <div style="flex: 1; min-width: 300px;">
+        <div style="flex: 1; min-width: 300px;" data-aos="fade-left">
             <div class="section-title" style="text-align: left; align-items: flex-start;">
                 <p>Our Story</p>
                 <h2>A Passion for Culinary Excellence</h2>
@@ -101,11 +102,11 @@
 
     <!-- Contact Section -->
     <section class="section" id="contact" style="text-align: center; padding: 4rem 10%;">
-        <div class="section-title">
+        <div class="section-title" data-aos="fade-up">
             <p>Get In Touch</p>
             <h2>We'd Love to Hear From You</h2>
         </div>
-        <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 3rem;">
+        <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 3rem;" data-aos="fade-up" data-aos-delay="200">
             <div style="background: rgba(255,255,255,0.02); padding: 2rem; border-radius: 15px; border: 1px solid var(--glass-border); flex: 1; min-width: 250px;">
                 <i class="fas fa-map-marker-alt fa-2x" style="color: var(--primary); margin-bottom: 1rem;"></i>
                 <h3>Location</h3>
@@ -245,22 +246,101 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer style="padding: 4rem 10%; background: #050505; text-align: center; border-top: 1px solid var(--glass-border);">
-        <div class="logo" style="margin-bottom: 2rem;">Gourmet<span>Hub</span></div>
-        <p style="color: var(--text-gray); margin-bottom: 2rem;">Crafting unforgettable dining experiences since 2024.</p>
-        <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem;">
-            <i class="fab fa-facebook fa-xl"></i>
-            <i class="fab fa-instagram fa-xl"></i>
-            <i class="fab fa-twitter fa-xl"></i>
+    <!-- Testimonials Section -->
+    <section class="section" id="testimonials" style="background: rgba(255,255,255,0.01); overflow: hidden; padding: 4rem 10%;">
+        <div class="section-title" data-aos="fade-up">
+            <p>Reviews</p>
+            <h2>What Our Customers Say</h2>
         </div>
-        <p style="font-size: 0.8rem; color: #444;">&copy; 2024 Gourmet Hub. All rights reserved.</p>
+        <div class="testimonials-container" data-aos="fade-up" data-aos-delay="200">
+            <div class="testimonials-slider" id="testimonialsSlider">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="review-text">"Gourmet Hub has completely changed how I order dinner. The food arrives piping hot and the packaging is beautiful! Highly recommend the Pepperoni Pizza."</p>
+                    <div class="user-info">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="User Profile">
+                        <div>
+                            <h4>Sneha Sharma</h4>
+                            <span>Food Enthusiast</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="review-text">"The Live Delivery Tracker is absolutely mind-blowing! I can see exactly when my food is being prepared and where the rider is. Incredible service!"</p>
+                    <div class="user-info">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="User Profile">
+                        <div>
+                            <h4>Rohan Verma</h4>
+                            <span>Tech Professional</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                    <p class="review-text">"Ordering is super smooth and payment is incredibly secure. The Dragon Sushi Roll is absolutely masterclass. A premium gourmet experience indeed!"</p>
+                    <div class="user-info">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="User Profile">
+                        <div>
+                            <h4>Pooja Patel</h4>
+                            <span>Corporate Manager</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-dots" id="sliderDots"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-section">
+        <div class="footer-grid">
+            <div class="footer-col brand-col">
+                <div class="logo">Gourmet<span>Hub</span></div>
+                <p>Bringing the finest culinary flavors from world-class kitchens directly to your doorstep. Experience premium dining fast.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#about">About Our Story</a></li>
+                    <li><a href="#contact">Get in Touch</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Opening Hours</h3>
+                <ul class="footer-hours">
+                    <li><span>Monday - Friday:</span> <span>9:00 AM - 11:00 PM</span></li>
+                    <li><span>Saturday - Sunday:</span> <span>10:00 AM - 11:00 PM</span></li>
+                    <li><span>Delivery Hours:</span> <span>24/7 Service</span></li>
+                </ul>
+            </div>
+            <div class="footer-col newsletter-col">
+                <h3>Newsletter</h3>
+                <p>Subscribe to receive tasty discounts, updates, and culinary news directly in your inbox.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed successfully!');">
+                    <input type="email" placeholder="Your Email Address" required>
+                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Gourmet Hub. All rights reserved. Crafted for Premium Dining.</p>
+        </div>
     </footer>
 
     <!-- Toast Notification Container -->
     <div id="toastContainer" class="toast-container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
