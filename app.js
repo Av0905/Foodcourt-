@@ -316,7 +316,13 @@ loginBtn.addEventListener('click', (e) => {
 
 // Auth State
 let isLoginMode = true;
-let currentUser = null;
+let currentUser = JSON.parse(localStorage.getItem('foodCourtUser')) || null;
+
+// If user is already logged in from a previous session, update UI immediately
+if (currentUser) {
+    loginBtn.innerHTML = `<i class="fas fa-user"></i> ${currentUser.name}`;
+    loginBtn.style.background = '#28a745';
+}
 
 window.toggleAuthMode = function() {
     isLoginMode = !isLoginMode;
@@ -397,6 +403,7 @@ window.handleAuth = async function() {
         }
         
         closeLoginModal();
+        localStorage.setItem('foodCourtUser', JSON.stringify(currentUser));
         loginBtn.innerHTML = `<i class="fas fa-user"></i> ${currentUser.name}`;
         loginBtn.style.background = '#28a745';
         alert(isLoginMode ? "Logged in successfully!" : "Registered successfully!");
@@ -409,6 +416,12 @@ window.handleAuth = async function() {
 
 window.closeLoginModal = function () {
     loginModal.classList.remove('active');
+}
+
+window.finishPayment = function() {
+    paymentModal.classList.remove('active');
+    document.getElementById('successState').style.display = 'none';
+    document.getElementById('initialPaymentState').style.display = 'block';
 }
 
 // Scroll Animations
