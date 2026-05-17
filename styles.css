@@ -494,3 +494,85 @@ nav {
         font-size: 0.9rem;
     }
 }
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: #28a745;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-weight: bold;
+    transform: translateX(120%);
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+/* Tracker Steps */
+.tracker-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.tracker-steps::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    z-index: 1;
+}
+
+.tracker-steps .step {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    color: var(--text-gray);
+    transition: all 0.3s ease;
+}
+
+.tracker-steps .step .icon {
+    width: 40px;
+    height: 40px;
+    background: #111;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem auto;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.tracker-steps .step.active {
+    color: white;
+}
+
+.tracker-steps .step.active .icon {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+}

@@ -159,6 +159,7 @@ const paymentModal = document.getElementById('paymentModal');
 const loginModal = document.getElementById('loginModal');
 const loginBtn = document.getElementById('loginBtn');
 const categoryBtns = document.querySelectorAll('.category-btn');
+const trackerModal = document.getElementById('trackerModal');
 
 // Initialize Menu
 function displayMenuItems(items) {
@@ -292,10 +293,19 @@ window.startPayment = async function (method) {
             }]);
         
         if (!error) {
-            processing.style.display = 'none';
-            success.style.display = 'block';
+            paymentModal.classList.remove('active');
             cart = [];
             updateCart();
+            
+            showToast("Order Accepted by Restaurant!");
+            trackerModal.classList.add('active');
+            
+            setTimeout(() => {
+                initTrackerMap();
+            }, 300);
+            
+            initial.style.display = 'block';
+            processing.style.display = 'none';
         } else {
             alert("Failed to place order: " + error.message);
             initial.style.display = 'block';
@@ -438,3 +448,67 @@ window.addEventListener('scroll', () => {
 
 // Initial Display
 displayMenuItems(menuItems);
+
+function showToast(message) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<i class="fas fa-check-circle"></i> <span>${message}</span>`;
+    container.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+let mapInstance = null;
+window.initTrackerMap = function() {
+    const distanceKm = (Math.random() * 3 + 1).toFixed(1);
+    const etaMins = Math.floor(distanceKm * 6 + 10);
+    
+    document.getElementById('trackerDistance').innerText = `${distanceKm} km`;
+    document.getElementById('trackerEta').innerText = `${etaMins} mins`;
+
+    if (!mapInstance) {
+        mapInstance = L.map('map').setView([19.0760, 72.8777], 13);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(mapInstance);
+    }
+    
+    const restaurantLat = 19.0760 + (Math.random() - 0.5) * 0.05;
+    const restaurantLng = 72.8777 + (Math.random() - 0.5) * 0.05;
+    
+    const userLat = restaurantLat + (Math.random() - 0.5) * 0.05;
+    const userLng = restaurantLng + (Math.random() - 0.5) * 0.05;
+
+    const resIcon = L.divIcon({ html: '<i class="fas fa-store fa-2x" style="color:var(--primary);"></i>', className: 'custom-div-icon' });
+    const userIcon = L.divIcon({ html: '<i class="fas fa-map-marker-alt fa-2x" style="color:#ff4d4d;"></i>', className: 'custom-div-icon' });
+
+    mapInstance.eachLayer(layer => {
+        if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+            mapInstance.removeLayer(layer);
+        }
+    });
+
+    L.marker([restaurantLat, restaurantLng], {icon: resIcon}).addTo(mapInstance);
+    L.marker([userLat, userLng], {icon: userIcon}).addTo(mapInstance);
+
+    const latlngs = [[restaurantLat, restaurantLng], [userLat, userLng]];
+    const polyline = L.polyline(latlngs, {color: '#ff8c00', dashArray: '5, 10', weight: 3}).addTo(mapInstance);
+    mapInstance.fitBounds(polyline.getBounds(), {padding: [50, 50]});
+
+    document.getElementById('step1').classList.add('active');
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step3').classList.remove('active');
+    
+    setTimeout(() => { document.getElementById('step2').classList.add('active'); }, 4000);
+    setTimeout(() => { document.getElementById('step3').classList.add('active'); }, 8000);
+}
+
+window.closeTracker = function() {
+    trackerModal.classList.remove('active');
+}
