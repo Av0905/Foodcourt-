@@ -1,3 +1,8 @@
+// Initialize Supabase
+const supabaseUrl = 'https://riilgsgetpduapkhcaak.supabase.co';
+const supabaseKey = 'sb_publishable_uBoxeP7I5HAE7hz9AB3LMg_a9qOd0nf';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
 const menuItems = [
     // Burgers & Pizza (Standard)
     {
@@ -276,32 +281,28 @@ window.startPayment = async function (method) {
     const totalPrice = parseFloat(totalStr);
 
     try {
-        const response = await fetch('http://localhost:3000/api/orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                userId: currentUser ? currentUser.id : null,
-                cartItems: cart,
-                totalPrice: totalPrice,
-                deliveryAddress: address,
-                contactNumber: phone
-            })
-        });
-
-        const data = await response.json();
+        const { error } = await supabase
+            .from('orders')
+            .insert([{
+                user_id: currentUser ? currentUser.id : null,
+                cart_items: JSON.stringify(cart),
+                total_price: totalPrice,
+                delivery_address: address,
+                contact_number: phone
+            }]);
         
-        if (data.success) {
+        if (!error) {
             processing.style.display = 'none';
             success.style.display = 'block';
             cart = [];
             updateCart();
         } else {
-            alert("Failed to place order: " + data.error);
+            alert("Failed to place order: " + error.message);
             initial.style.display = 'block';
             processing.style.display = 'none';
         }
     } catch (err) {
-        alert("Network error: Make sure the server is running on port 3000.");
+        alert("Database connection error.");
         initial.style.display = 'block';
         processing.style.display = 'none';
     }
@@ -354,31 +355,53 @@ window.handleAuth = async function() {
         return;
     }
 
-    const endpoint = isLoginMode ? '/api/login' : '/api/register';
-    const payload = isLoginMode ? { email, password } : { name, email, password };
-
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
     
     try {
-        const response = await fetch('http://localhost:3000' + endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            currentUser = data.user || { id: data.userId, name: data.name, email: data.email };
-            closeLoginModal();
-            loginBtn.innerHTML = `<i class="fas fa-user"></i> ${currentUser.name}`;
-            loginBtn.style.background = '#28a745'; // Success color
-            alert(isLoginMode ? "Logged in successfully!" : "Registered successfully!");
+        if (isLoginMode) {
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('email', email)
+                .eq('password', password)
+                .single();
+                
+            if (error || !data) {
+                alert("Authentication failed: Invalid credentials");
+                return;
+            }
+            currentUser = data;
         } else {
-            alert(data.error || "Authentication failed");
+            const { data: existingUser } = await supabase
+                .from('users')
+                .select('*')
+                .eq('email', email)
+                .maybeSingle();
+                
+            if (existingUser) {
+                alert("Email already registered!");
+                return;
+            }
+            
+            const { data, error } = await supabase
+                .from('users')
+                .insert([{ name, email, password }])
+                .select()
+                .single();
+                
+            if (error) {
+                alert("Registration failed: " + error.message);
+                return;
+            }
+            currentUser = data;
         }
+        
+        closeLoginModal();
+        loginBtn.innerHTML = `<i class="fas fa-user"></i> ${currentUser.name}`;
+        loginBtn.style.background = '#28a745';
+        alert(isLoginMode ? "Logged in successfully!" : "Registered successfully!");
     } catch (err) {
-        alert("Network error: Make sure the server is running on port 3000.");
+        alert("Database connection error. Check your internet or Supabase configuration.");
     } finally {
         submitBtn.innerText = isLoginMode ? 'Log In' : 'Register';
     }
