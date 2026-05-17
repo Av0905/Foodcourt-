@@ -132,7 +132,7 @@ nav {
 /* Hero Section */
 .hero {
     height: 100vh;
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('assets/hero.png');
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('./assets/hero.png');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -467,10 +467,30 @@ nav {
         font-size: 3rem;
     }
     .nav-links {
-        display: none;
+        display: none; /* Can be replaced with a hamburger menu later */
     }
     .cart-sidebar {
         width: 100%;
         right: -100%;
+    }
+    .menu-grid {
+        grid-template-columns: 1fr;
+    }
+    .modal-content {
+        padding: 2rem;
+        width: 95%;
+    }
+    .payment-options {
+        grid-template-columns: 1fr;
+    }
+    .section {
+        padding: 4rem 5%;
+    }
+    .categories {
+        gap: 1rem;
+    }
+    .category-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
     }
 }

@@ -74,6 +74,67 @@ const menuItems = [
         price: 80,
         image: "./assets/idli-sambar.png",
         desc: "Soft steamed rice cakes served with hot sambar and chutney."
+    },
+    // North Indian
+    {
+        id: 13,
+        name: "Chicken Dum Biryani",
+        category: "northindian",
+        price: 299,
+        image: "./assets/chicken-biryani.png",
+        desc: "Aromatic basmati rice cooked with tender chicken and authentic spices."
+    },
+    {
+        id: 14,
+        name: "Classic Butter Chicken",
+        category: "northindian",
+        price: 349,
+        image: "./assets/butter-chicken.png",
+        desc: "Rich and creamy tomato gravy with tender roasted chicken chunks."
+    },
+    {
+        id: 15,
+        name: "Paneer Tikka",
+        category: "northindian",
+        price: 249,
+        image: "./assets/paneer-tikka.png",
+        desc: "Cottage cheese marinated in yogurt and spices, grilled to perfection."
+    },
+    // Desserts
+    {
+        id: 16,
+        name: "Sizzling Brownie",
+        category: "desserts",
+        price: 199,
+        image: "./assets/chocolate-brownie.png",
+        desc: "Warm chocolate brownie topped with vanilla ice cream and hot fudge."
+    },
+    // Beverages
+    {
+        id: 17,
+        name: "Creamy Cold Coffee",
+        category: "beverages",
+        price: 149,
+        image: "./assets/cold-coffee.png",
+        desc: "Refreshing cold coffee blended with ice cream and chocolate syrup."
+    },
+    // Fast Food
+    {
+        id: 18,
+        name: "Steamed Chicken Momos",
+        category: "fastfood",
+        price: 129,
+        image: "./assets/momos.png",
+        desc: "Juicy chicken mince stuffed in thin wrappers, served with spicy dip."
+    },
+    // Italian
+    {
+        id: 19,
+        name: "Alfredo Penne Pasta",
+        category: "italian",
+        price: 279,
+        image: "./assets/pasta.png",
+        desc: "Penne tossed in a rich, creamy cheese sauce with herbs and olives."
     }
 ];
 
@@ -90,6 +151,8 @@ const cartToggle = document.getElementById('cartToggle');
 const closeCart = document.getElementById('closeCart');
 const checkoutBtn = document.getElementById('checkoutBtn');
 const paymentModal = document.getElementById('paymentModal');
+const loginModal = document.getElementById('loginModal');
+const loginBtn = document.getElementById('loginBtn');
 const categoryBtns = document.querySelectorAll('.category-btn');
 
 // Initialize Menu
@@ -193,7 +256,15 @@ function closeModal() {
     paymentModal.classList.remove('active');
 }
 
-window.startPayment = function (method) {
+window.startPayment = async function (method) {
+    const phone = document.getElementById('checkoutPhone').value;
+    const address = document.getElementById('checkoutAddress').value;
+
+    if (!phone || !address) {
+        alert("Please enter delivery address and phone number.");
+        return;
+    }
+
     const initial = document.getElementById('initialPaymentState');
     const processing = document.getElementById('processingState');
     const success = document.getElementById('successState');
@@ -201,13 +272,120 @@ window.startPayment = function (method) {
     initial.style.display = 'none';
     processing.style.display = 'block';
 
-    // Simulate Payment Gateway Logic
-    setTimeout(() => {
+    const totalStr = cartTotal.innerText.replace('₹', '');
+    const totalPrice = parseFloat(totalStr);
+
+    try {
+        const response = await fetch('http://localhost:3000/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: currentUser ? currentUser.id : null,
+                cartItems: cart,
+                totalPrice: totalPrice,
+                deliveryAddress: address,
+                contactNumber: phone
+            })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+            processing.style.display = 'none';
+            success.style.display = 'block';
+            cart = [];
+            updateCart();
+        } else {
+            alert("Failed to place order: " + data.error);
+            initial.style.display = 'block';
+            processing.style.display = 'none';
+        }
+    } catch (err) {
+        alert("Network error: Make sure the server is running on port 3000.");
+        initial.style.display = 'block';
         processing.style.display = 'none';
-        success.style.display = 'block';
-        cart = [];
-        updateCart();
-    }, 2500);
+    }
+}
+
+// Login Simulation
+loginBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    loginModal.classList.add('active');
+});
+
+// Auth State
+let isLoginMode = true;
+let currentUser = null;
+
+window.toggleAuthMode = function() {
+    isLoginMode = !isLoginMode;
+    const nameInput = document.getElementById('authName');
+    const title = document.getElementById('authTitle');
+    const subtitle = document.getElementById('authSubtitle');
+    const submitBtn = document.getElementById('authSubmitBtn');
+    const toggleText = document.getElementById('authToggleText');
+    const toggleLink = document.getElementById('authToggleLink');
+
+    if (isLoginMode) {
+        nameInput.style.display = 'none';
+        title.innerText = 'Welcome Back';
+        subtitle.innerText = 'Log in to access your saved addresses and orders.';
+        submitBtn.innerText = 'Log In';
+        toggleText.innerText = 'Don\'t have an account?';
+        toggleLink.innerText = 'Register';
+    } else {
+        nameInput.style.display = 'block';
+        title.innerText = 'Create Account';
+        subtitle.innerText = 'Join us to experience premium food delivery.';
+        submitBtn.innerText = 'Register';
+        toggleText.innerText = 'Already have an account?';
+        toggleLink.innerText = 'Log In';
+    }
+};
+
+window.handleAuth = async function() {
+    const name = document.getElementById('authName').value;
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+    const submitBtn = document.getElementById('authSubmitBtn');
+    
+    if (!email || !password || (!isLoginMode && !name)) {
+        alert("Please fill all required fields");
+        return;
+    }
+
+    const endpoint = isLoginMode ? '/api/login' : '/api/register';
+    const payload = isLoginMode ? { email, password } : { name, email, password };
+
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    
+    try {
+        const response = await fetch('http://localhost:3000' + endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            currentUser = data.user || { id: data.userId, name: data.name, email: data.email };
+            closeLoginModal();
+            loginBtn.innerHTML = `<i class="fas fa-user"></i> ${currentUser.name}`;
+            loginBtn.style.background = '#28a745'; // Success color
+            alert(isLoginMode ? "Logged in successfully!" : "Registered successfully!");
+        } else {
+            alert(data.error || "Authentication failed");
+        }
+    } catch (err) {
+        alert("Network error: Make sure the server is running on port 3000.");
+    } finally {
+        submitBtn.innerText = isLoginMode ? 'Log In' : 'Register';
+    }
+};
+
+window.closeLoginModal = function () {
+    loginModal.classList.remove('active');
 }
 
 // Scroll Animations
