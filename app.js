@@ -333,7 +333,7 @@ let currentUser = JSON.parse(localStorage.getItem('foodCourtUser')) || null;
 
 // If user is already logged in from a previous session, update UI immediately
 if (currentUser) {
-    loginBtn.innerHTML = `<i class="fas fa-user"></i> ${currentUser.name}`;
+    loginBtn.innerHTML = `<i class="fas fa-user"></i> <span class="user-name-text">${currentUser.name}</span>`;
     loginBtn.style.background = '#28a745';
 }
 
@@ -417,7 +417,7 @@ window.handleAuth = async function() {
         
         closeLoginModal();
         localStorage.setItem('foodCourtUser', JSON.stringify(currentUser));
-        loginBtn.innerHTML = `<i class="fas fa-user"></i> ${currentUser.name}`;
+        loginBtn.innerHTML = `<i class="fas fa-user"></i> <span class="user-name-text">${currentUser.name}</span>`;
         loginBtn.style.background = '#28a745';
         alert(isLoginMode ? "Logged in successfully!" : "Registered successfully!");
     } catch (err) {
