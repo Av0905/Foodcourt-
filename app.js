@@ -538,9 +538,22 @@ window.initTrackerMap = function() {
     document.getElementById('step1').classList.add('active');
     document.getElementById('step2').classList.remove('active');
     document.getElementById('step3').classList.remove('active');
+    document.getElementById('step4').classList.remove('active');
     
-    setTimeout(() => { document.getElementById('step2').classList.add('active'); }, 4000);
-    setTimeout(() => { document.getElementById('step3').classList.add('active'); }, 8000);
+    setTimeout(() => { 
+        document.getElementById('step2').classList.add('active'); 
+        showToast("Your order is being freshly prepared! 👨‍🍳");
+    }, 4000);
+    
+    setTimeout(() => { 
+        document.getElementById('step3').classList.add('active'); 
+        showToast("Order picked up! Rider is on the way. 🚴‍♂️");
+    }, 8000);
+
+    setTimeout(() => { 
+        document.getElementById('step4').classList.add('active'); 
+        showToast("Order delivered! Enjoy your delicious food! 🍔🍕");
+    }, 12000);
 }
 
 window.closeTracker = function() {
