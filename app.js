@@ -1,7 +1,7 @@
 // Initialize Supabase
 const supabaseUrl = 'https://riilgsgetpduapkhcaak.supabase.co';
 const supabaseKey = 'sb_publishable_uBoxeP7I5HAE7hz9AB3LMg_a9qOd0nf';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 const menuItems = [
     // Burgers & Pizza (Standard)
@@ -281,7 +281,7 @@ window.startPayment = async function (method) {
     const totalPrice = parseFloat(totalStr);
 
     try {
-        const { error } = await supabase
+        const { error } = await supabaseClient
             .from('orders')
             .insert([{
                 user_id: currentUser ? currentUser.id : null,
@@ -359,7 +359,7 @@ window.handleAuth = async function() {
     
     try {
         if (isLoginMode) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('users')
                 .select('*')
                 .eq('email', email)
@@ -372,7 +372,7 @@ window.handleAuth = async function() {
             }
             currentUser = data;
         } else {
-            const { data: existingUser } = await supabase
+            const { data: existingUser } = await supabaseClient
                 .from('users')
                 .select('*')
                 .eq('email', email)
@@ -383,7 +383,7 @@ window.handleAuth = async function() {
                 return;
             }
             
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('users')
                 .insert([{ name, email, password }])
                 .select()
