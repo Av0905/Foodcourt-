@@ -160,6 +160,9 @@ const loginModal = document.getElementById('loginModal');
 const loginBtn = document.getElementById('loginBtn');
 const categoryBtns = document.querySelectorAll('.category-btn');
 const trackerModal = document.getElementById('trackerModal');
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const mobileSidebar = document.getElementById('mobileSidebar');
+const closeMobileMenu = document.getElementById('closeMobileMenu');
 
 // Initialize Menu
 function displayMenuItems(items) {
@@ -511,4 +514,21 @@ window.initTrackerMap = function() {
 
 window.closeTracker = function() {
     trackerModal.classList.remove('active');
+}
+
+// Mobile Sidebar Logic
+if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+        mobileSidebar.classList.add('active');
+    });
+}
+
+if (closeMobileMenu) {
+    closeMobileMenu.addEventListener('click', () => {
+        mobileSidebar.classList.remove('active');
+    });
+}
+
+window.closeMobileMenuFunc = function() {
+    mobileSidebar.classList.remove('active');
 }
